@@ -1,0 +1,30 @@
+
+server :
+  port : 8081
+
+
+es:
+  host : 127.0.0.1
+#  host : 52.66.205.138
+  port : 9300
+  cluster-name : docker-cluster
+  node-name: Sv4RsYa
+#  node-name: KspSDfx
+  transport-sniff: false
+  http-enabled: true
+
+
+
+
+#For Logging
+logging:
+  config: classpath:logback-dev.xml
+
+#Ditributed Tracing
+#spring:
+#  zipkin:
+#    enabled: true
+#    base-url: 5
+
+
+

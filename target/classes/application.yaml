@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: els-service
+
+#es:
+#  #  host : 127.0.0.1
+#  host : 52.66.205.138
+#  port : 9300
+#  cluster-name : docker-cluster
+#  #  node-name: Sv4RsYa
+#  node-name: KspSDfx
+#  transport-sniff: false
+#  http-enabled: true
+

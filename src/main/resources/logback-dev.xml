@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration>
+
+    <property name="SH_HOME" value="/home/frost-4/Desktop/Software/ok" />
+
+    <appender name="FILE-AUDIT"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${SH_HOME}/debug.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} - %msg%n
+            </Pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${SH_HOME}/archived/debug.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread, %X{X-B3-TraceId:-},%X{X-B3-SpanId:-}] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <!--<destination>localhost:5000</destination>-->
+        <destination>0.0.0.0:5000</destination>
+
+        <encoder
+                class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <mdc /> <!-- MDC variables on the Thread will be written as JSON fields -->
+                <context /> <!--Outputs entries from logback's context -->
+                <version /> <!-- Logstash json format version, the @version field in the output -->
+                <logLevel />
+                <loggerName />
+
+                <pattern>
+                    <pattern>
+                        {
+                        "serviceName": "els-service"
+                        }
+                    </pattern>
+                </pattern>
+
+                <threadName />
+                <message />
+                <logstashMarkers />
+                <stackTrace />
+            </providers>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="STASH"/>
+        <!--<appender-ref ref="FILE-AUDIT" />-->
+    </root>
+    <logger name="com.example" level="info" additivity="false">
+        <appender-ref ref="FILE-AUDIT"/>
+       <!--<appender-ref ref="STASH"/>-->
+    </logger>
+</configuration>
